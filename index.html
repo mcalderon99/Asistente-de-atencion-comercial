@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asistente de Casos</title>
+
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #172033;
+      --muted: #667085;
+      --line: #dfe5ef;
+      --primary: #3157d5;
+      --primary-dark: #2445b5;
+      --primary-soft: #eef4ff;
+      --success: #18794e;
+      --success-soft: #eaf7f0;
+      --warning: #7a4f00;
+      --warning-bg: #fff6d6;
+      --danger: #b42318;
+      --danger-bg: #fff0ee;
+      --shadow: 0 10px 30px rgba(29, 41, 57, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 28px 18px 60px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #2445b5, #5575e9);
+      color: #fff;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+
+    .hero small {
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 800;
+      opacity: .85;
+    }
+
+    .hero h1 {
+      margin: .35rem 0 .5rem;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 820px;
+      line-height: 1.55;
+      opacity: .95;
+    }
+
+    .disclaimer {
+      background: var(--warning-bg);
+      border: 1px solid #efd46b;
+      color: var(--warning);
+      border-radius: 16px;
+      padding: 15px 17px;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .disclaimer strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+
+    .card h2 {
+      margin: 0 0 6px;
+      font-size: 1.25rem;
+    }
+
+    .sub {
+      color: var(--muted);
+      margin: 0 0 18px;
+      line-height: 1.5;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-size: .9rem;
+      font-weight: 750;
+      margin-bottom: 7px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid #cfd6e1;
+      border-radius: 12px;
+      padding: 12px 13px;
+      font: inherit;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #5575e9;
+      box-shadow: 0 0 0 3px rgba(85, 117, 233, .14);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 105px;
+    }
+
+    .mode-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .mode-btn {
+      text-align: left;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      border-radius: 15px;
+      padding: 16px;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .mode-btn strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 1rem;
+    }
+
+    .mode-btn span {
+      color: var(--muted);
+      font-size: .86rem;
+      line-height: 1.4;
+    }
+
+    .mode-btn.active {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      box-shadow: 0 0 0 2px rgba(49, 87, 213, .08);
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button.action {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .secondary {
+      background: #edf1f7;
+      color: #26334d;
+    }
+
+    .success {
+      background: var(--success);
+      color: #fff;
+    }
+
+    .toggle-on {
+      background: var(--primary-soft);
+      color: #2346a2;
+      border: 1px solid #ccd9ff !important;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: .8rem;
+      font-weight: 800;
+      background: #edf1f7;
+      color: #45536b;
+    }
+
+    .badge.open {
+      background: #fff2e8;
+      color: #a04400;
+    }
+
+    .badge.closed {
+      background: var(--success-soft);
+      color: var(--success);
+    }
+
+    .guide {
+      margin-top: 16px;
+      border: 1px solid #ccd9ff;
+      background: #f8faff;
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .guide-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .guide-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .info {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      background: #fff;
+    }
+
+    .info.wide {
+      grid-column: 1 / -1;
+    }
+
+    .info span {
+      display: block;
+      color: var(--muted);
+      font-size: .76rem;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      margin-bottom: 5px;
+    }
+
+    .info strong {
+      font-size: .93rem;
+      line-height: 1.45;
+    }
+
+    .alert {
+      margin-top: 10px;
+      border-radius: 12px;
+      padding: 12px 14px;
+      line-height: 1.5;
+    }
+
+    .alert.critical {
+      background: var(--danger-bg);
+      color: #8b2018;
+      border: 1px solid #ffd2cd;
+    }
+
+    .alert.docs {
+      background: var(--primary-soft);
+      color: #2346a2;
+      border: 1px solid #ccd9ff;
+    }
+
+    .obs-suggestion {
+      background: #f7f9fc;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .obs-suggestion label {
+      margin-bottom: 7px;
+    }
+
+    .preview {
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: #101828;
+      color: #f8fafc;
+      border-radius: 14px;
+      padding: 16px;
+      line-height: 1.6;
+      min-height: 230px;
+      margin: 0;
+    }
+
+    .copy-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .mini {
+      font-size: .8rem;
+      color: var(--muted);
+    }
+
+    .executive-box {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: end;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: .82rem;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 820px) {
+      .grid-3,
+      .guide-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .info.wide {
+        grid-column: auto;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .grid-2,
+      .mode-row,
+      .executive-box {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <section class="hero">
+      <small>Herramienta de apoyo</small>
+      <h1>Asistente de Casos</h1>
+      <p>
+        Completa los datos de la llamada, selecciona el procedimiento cuando corresponda
+        y genera el texto final listo para copiar en el caso.
+      </p>
+    </section>
+
+    <div class="disclaimer">
+      <strong>⚠️ Validación obligatoria</strong>
+      Esta herramienta es solo de apoyo. Antes de realizar una gestión, informar condiciones
+      o ingresar un caso, <b>siempre valida la información y el procedimiento con el apoyo de turno</b>.
+    </div>
+
+    <section class="card">
+      <h2>1. Identificación del ejecutivo</h2>
+      <p class="sub">
+        Este nombre se usará automáticamente en la firma “Atte.” y quedará guardado en este navegador.
+      </p>
+
+      <div class="executive-box">
+        <div class="field" style="margin-bottom:0">
+          <label for="ejecutivo">Nombre del ejecutivo</label>
+          <input id="ejecutivo" placeholder="Ej: María González">
+        </div>
+
+        <button class="action secondary" id="guardarEjecutivo">
+          Guardar nombre
+        </button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>2. Tipo de registro</h2>
+      <p class="sub">
+        Usa el caso guiado cuando necesites apoyo con el procedimiento. Usa caso rápido si solo necesitas
+        completar los datos y redactar la observación manualmente.
+      </p>
+
+      <div class="mode-row">
+        <button class="mode-btn active" id="modoGuiado" type="button">
+          <strong>🧭 Caso guiado</strong>
+          <span>Selecciona un procedimiento, revisa la información de apoyo y genera una observación inicial.</span>
+        </button>
+
+        <button class="mode-btn" id="modoRapido" type="button">
+          <strong>⚡ Caso rápido</strong>
+          <span>Oculta el sondeo del procedimiento y deja solo los datos base más la observación.</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>3. Datos de la llamada</h2>
+      <p class="sub">
+        Copia los datos desde la llamada y pégalos en sus campos correspondientes.
+      </p>
+
+      <div class="grid-3">
+        <div class="field">
+          <label for="caso">Caso</label>
+          <input id="caso" placeholder="N° de caso generado en Salesforce">
+        </div>
+
+        <div class="field">
+          <label for="nombre">Nombre</label>
+          <input id="nombre" placeholder="Nombre del cliente">
+        </div>
+
+        <div class="field">
+          <label for="rut">RUT</label>
+          <input id="rut" placeholder="12.345.678-9">
+        </div>
+
+        <div class="field">
+          <label for="telefono">Teléfono</label>
+          <input id="telefono" placeholder="+56 9...">
+        </div>
+
+        <div class="field">
+          <label for="suministro">Suministro</label>
+          <input id="suministro" placeholder="N° de suministro">
+        </div>
+
+        <div class="field">
+          <label for="direccion">Dirección</label>
+          <input id="direccion" placeholder="Dirección del suministro">
+        </div>
+
+        <div class="field">
+          <label for="comuna">Comuna</label>
+          <input id="comuna" placeholder="Comuna">
+        </div>
+
+        <div class="field">
+          <label for="connid">Connid</label>
+          <input id="connid" placeholder="Connid de la llamada">
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <button class="action secondary" id="toggleInsistencia" type="button">
+          + Agregar insistencia
+        </button>
+      </div>
+
+      <div id="insistenciaBox" class="grid-2 hidden" style="margin-top:14px">
+        <div class="field" style="margin-bottom:0">
+          <label for="detalleInsistencia">Detalle de insistencia <span class="mini">(opcional)</span></label>
+          <input id="detalleInsistencia" placeholder="Ej: Caso anterior N° 123456 / cliente reitera solicitud">
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="procedimientoSection">
+      <h2>4. Procedimiento</h2>
+      <p class="sub">
+        Primero selecciona el tipo de gestión y luego el procedimiento o caso específico.
+      </p>
+
+      <div class="grid-3">
+        <div class="field">
+          <label for="tipoProcedimiento">Tipo de procedimiento</label>
+          <select id="tipoProcedimiento">
+            <option value="">Selecciona un tipo...</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="procedimiento">Procedimiento / caso</label>
+          <select id="procedimiento" disabled>
+            <option value="">Selecciona primero un tipo...</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="buscarProcedimiento">Buscar por palabra <span class="mini">(opcional)</span></label>
+          <input id="buscarProcedimiento" placeholder="Ej: exceso, corte, prórroga...">
+        </div>
+      </div>
+
+      <div id="guiaProcedimiento" class="guide hidden">
+        <div class="guide-head">
+          <span class="badge" id="gGestion"></span>
+          <span class="badge" id="gOrden"></span>
+          <span class="badge" id="gEstado"></span>
+        </div>
+
+        <div class="guide-grid">
+          <div class="info">
+            <span>Motivo</span>
+            <strong id="gMotivo"></strong>
+          </div>
+
+          <div class="info">
+            <span>Submotivo</span>
+            <strong id="gSubmotivo"></strong>
+          </div>
+
+          <div class="info wide">
+            <span>Ruta</span>
+            <strong id="gRuta"></strong>
+          </div>
+
+          <div class="info wide">
+            <span>Acción requerida</span>
+            <strong id="gAccion"></strong>
+          </div>
+        </div>
+
+        <div class="alert critical">
+          <strong>Revisar antes de gestionar:</strong>
+          <div id="gClave"></div>
+        </div>
+
+        <div class="alert docs">
+          <strong>Documentos / antecedentes:</strong>
+          <div id="gDocumentos"></div>
+        </div>
+
+        <p class="mini" style="margin:12px 0 0">
+          Recuerda validar esta información con el apoyo de turno antes de realizar la gestión.
+        </p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 id="obsTitle">5. Observación</h2>
+      <p class="sub" id="obsHelp">
+        Al seleccionar un procedimiento se generará un inicio sugerido. Puedes modificarlo y agregar tus propios comentarios.
+      </p>
+
+      <div id="sugerenciaBox" class="obs-suggestion">
+        <div class="field" style="margin-bottom:0">
+          <label for="inicioObs">Inicio sugerido de OBS</label>
+          <textarea id="inicioObs" placeholder="Selecciona un procedimiento para generar una sugerencia."></textarea>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="comentarios">Comentarios adicionales</label>
+        <textarea id="comentarios" placeholder="Agrega aquí la información particular entregada por el cliente, validaciones realizadas, acuerdos, etc."></textarea>
+      </div>
+
+      <div class="field">
+        <label for="obsFinal">OBS final</label>
+        <textarea id="obsFinal" readonly></textarea>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 id="previewTitle">6. Caso listo para copiar</h2>
+      <p class="sub">
+        Este bloque conserva el formato base solicitado y está listo para pegar en el caso.
+      </p>
+
+      <pre class="preview" id="preview"></pre>
+
+      <div class="copy-row">
+        <div class="toolbar">
+          <button class="action success" id="copiarCaso" type="button">
+            Copiar caso completo
+          </button>
+
+          <button class="action primary" id="copiarObs" type="button">
+            Copiar solo OBS
+          </button>
+
+          <button class="action secondary" id="nuevaLlamada" type="button">
+            Nueva llamada
+          </button>
+        </div>
+
+        <span class="badge hidden" id="copiado">Copiado ✓</span>
+      </div>
+    </section>
+
+    <footer>
+      Herramienta de apoyo. Validar siempre la información y el procedimiento con el apoyo de turno.
+    </footer>
+
+  </div>
+
+  <script>
+    const PROCEDIMIENTOS = [{"id":1,"gestion":"Accionador Rápido","tipo":"Lecturas","nombre":"Informa fecha de lectura","ruta":"Desde el Suministro -> Lista relacionada: Lecturas","accion":"Informa fecha de lectura","motivo":"N/A","submotivo":"N/A","orden":"Sin Orden","estado":"Cerrado","clave":"Recordar que a estos casos siempre se les debe agregar un comentario luego de crearlos.","documentos":"Ninguno"},{"id":2,"gestion":"Accionador Rápido","tipo":"Lecturas","nombre":"Ingreso de lectura","ruta":"Desde el Suministro -> Lista relacionada: Medidores","accion":"Ingreso de lectura","motivo":"N/A","submotivo":"N/A","orden":"Sin Orden","estado":"Cerrado","clave":"Seleccionar el medidor haciendo clic sobre la casilla de la izquierda. Si no hay seguridad de registro, avisar a supervisor.","documentos":"Ninguno"},{"id":3,"gestion":"Accionador Rápido","tipo":"Boletas","nombre":"Envío copia boleta","ruta":"Desde Cuenta -> Lista relacionada: Facturación","accion":"Copia de boleta","motivo":"N/A","submotivo":"N/A","orden":"Sin Orden","estado":"Cerrado","clave":"Si arroja error en Salesforce, reingresar usando opción 'Copia de boleta' (casilla bajo fecha) y detallar comentarios para BackOffice.","documentos":"Ninguno"},{"id":4,"gestion":"Accionador Rápido","tipo":"Boletas","nombre":"Suscripción Boleta/Factura Electrónica","ruta":"Desde Cuenta -> Lista relacionada: Perfiles de facturación","accion":"Boleta Electrónica","motivo":"N/A","submotivo":"N/A","orden":"Sin Orden","estado":"Cerrado","clave":"Activar la casilla junto al perfil de facturación correspondiente antes de presionar el botón.","documentos":"Ninguno"},{"id":5,"gestion":"Accionador Rápido","tipo":"Facturación","nombre":"Informa saldo","ruta":"Desde Suministro -> Lista relacionada: Deuda","accion":"Informa saldo","motivo":"N/A","submotivo":"N/A","orden":"Sin Orden","estado":"Cerrado","clave":"Muestra de inmediato el saldo deudor vigente en la cuenta del suministro.","documentos":"Ninguno"},{"id":6,"gestion":"Accionador Rápido","tipo":"Boletas","nombre":"Abrir boletas/facturas (Conceptos)","ruta":"Desde Suministro -> Lista relacionada: Conceptos económicos","accion":"Enlace columna 'Factura' -> 'Acceso a factura'","motivo":"N/A","submotivo":"N/A","orden":"Sin Orden","estado":"Cerrado","clave":"Pinchas enlace en columna Factura, luego clic sobre 'Acceso a factura' que está abajo del todo.","documentos":"Ninguno"},{"id":7,"gestion":"Accionador Rápido","tipo":"Boletas","nombre":"Abrir boletas/facturas (Facturaciones)","ruta":"Desde Cuenta -> Lista relacionada: Facturación","accion":"Enlace columna 'Id Factura' -> 'Acceso a factura'","motivo":"N/A","submotivo":"N/A","orden":"Sin Orden","estado":"Cerrado","clave":"Pinchas enlace en columna Id Factura, luego clic sobre 'Acceso a factura' en el extremo inferior.","documentos":"Ninguno"},{"id":8,"gestion":"Accionador Rápido","tipo":"Corte y Reposición","nombre":"Informa fecha de corte","ruta":"Desde Suministro -> Encabezado general","accion":"Corte por deuda","motivo":"N/A","submotivo":"N/A","orden":"Sin Orden","estado":"Cerrado","clave":"Despliega de manera rápida y directa la fecha de corte programada por morosidad.","documentos":"Ninguno"},{"id":9,"gestion":"Accionador Rápido","tipo":"Recaudación","nombre":"Comprobante de pago","ruta":"Desde Cuenta -> Encabezado general","accion":"Comprobante de pago","motivo":"N/A","submotivo":"N/A","orden":"Sin Orden","estado":"Cerrado","clave":"Permite generar e imprimir el comprobante de pago asociado de forma expedita.","documentos":"Ninguno"},{"id":10,"gestion":"Accionador Rápido","tipo":"Contactos","nombre":"Cambio de relación cliente-suministro","ruta":"Desde Contacto -> Lista relacionada: Servicios/productos","accion":"Modificar","motivo":"N/A","submotivo":"N/A","orden":"Sin Orden","estado":"Cerrado","clave":"Hacer clic en modificar directamente en la línea correspondiente al suministro a actualizar.","documentos":"Ninguno"},{"id":11,"gestion":"Accionador Rápido","tipo":"Facturación","nombre":"Restricción de convenios","ruta":"Desde Cuenta -> Campo 'Suministros Relacionados'","accion":"Activar/desactivar Restricciones de Suministro","motivo":"N/A","submotivo":"N/A","orden":"Sin Orden","estado":"Cerrado","clave":"Marcar previamente la casilla del suministro respectivo antes de gatillar la acción.","documentos":"Ninguno"},{"id":12,"gestion":"Accionador Rápido","tipo":"Corte y Reposición","nombre":"Orden de Corte","ruta":"Desde Suministro -> Lista relacionada: Corte, reposiciones y prórrogas","accion":"Solicitud corte y reposición","motivo":"N/A","submotivo":"N/A","orden":"Con Orden","estado":"Abierto","clave":"Inicia la orden técnica de corte del suministro.","documentos":"Ninguno"},{"id":13,"gestion":"Accionador Rápido","tipo":"Corte y Reposición","nombre":"Orden de Reposición","ruta":"Desde Suministro -> Lista relacionada: Corte, reposiciones y prórrogas","accion":"Solicitud corte y reposición","motivo":"N/A","submotivo":"N/A","orden":"Con Orden","estado":"Abierto","clave":"Inicia la orden de reposición del servicio técnico en terreno.","documentos":"Ninguno"},{"id":14,"gestion":"Accionador Rápido","tipo":"Corte y Reposición","nombre":"Prórroga","ruta":"Desde Suministro -> Lista relacionada: Corte, reposiciones y prórrogas","accion":"Solicitud de prórroga","motivo":"N/A","submotivo":"N/A","orden":"Sin Orden","estado":"Cerrado","clave":"Aplica una prórroga para suspender temporalmente la orden de corte activa.","documentos":"Ninguno"},{"id":15,"gestion":"Accionador Rápido","tipo":"Calidad de suministro","nombre":"Artefacto dañado / Daños a terceros","ruta":"Desde la Cuenta -> Lista relacionada: Casos","accion":"Artefacto dañado","motivo":"N/A","submotivo":"N/A","orden":"Con Orden","estado":"Abierto","clave":"Inicia la evaluación por daños a artefactos eléctricos declarados por el cliente o terceros.","documentos":"Ninguno"},{"id":16,"gestion":"Accionador Rápido","tipo":"Boletas","nombre":"Modificar nombre a boleta","ruta":"Desde Cuenta -> Lista relacionada: Perfiles de facturación","accion":"Cambio nombre documento","motivo":"N/A","submotivo":"N/A","orden":"Sin Orden","estado":"Cerrado","clave":"Ingresar al perfil pinchando el enlace con código alfanumérico para visibilizar el botón.","documentos":"Ninguno"},{"id":17,"gestion":"Accionador Rápido","tipo":"Contactos","nombre":"Modificar datos de contacto","ruta":"Desde Contacto -> Encabezado (ícono triángulo invertido)","accion":"Modificar","motivo":"N/A","submotivo":"N/A","orden":"Sin Orden","estado":"Cerrado","clave":"OBS: Prohibido modificar a contactos que tengan activo el flag o distintivo de 'Contacto Digital'.","documentos":"Ninguno"},{"id":18,"gestion":"Caso Genérico","tipo":"Lecturas","nombre":"Verificación de lectura con visita virtual","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Lectura","submotivo":"Visita virtual","orden":"Con Orden","estado":"Abierto","clave":"EXCLUSIVO PARA TARIFAS BT1 y THR. Trámite sin costo. Registrar obligatoriamente fonos de contacto.","documentos":"Ninguno"},{"id":19,"gestion":"Caso Genérico","tipo":"Lecturas","nombre":"Verificación de lectura pedestre","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Lectura","submotivo":"Verificación de lectura Pedestre","orden":"Con Orden","estado":"Abierto","clave":"Trámite asociado a un costo (o posible costo). Registrar fonos obligatoriamente.","documentos":"Ninguno"},{"id":20,"gestion":"Caso Genérico","tipo":"Lecturas","nombre":"Verificación de lectura SMT","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Lectura","submotivo":"Verificación de lectura SMT","orden":"Con Orden","estado":"Abierto","clave":"Se gatilla para medidores inteligentes con dudas en lecturas de reparto.","documentos":"Ninguno"},{"id":21,"gestion":"Caso Genérico","tipo":"Lecturas","nombre":"Verificación de lectura Telemedida","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Lectura","submotivo":"Verificación de lectura Telemedida","orden":"Con Orden","estado":"Abierto","clave":"Casos asociados específicamente a sistemas de concentradores de telemedida.","documentos":"Ninguno"},{"id":22,"gestion":"Caso Genérico","tipo":"Medidores","nombre":"Verificación de equipo de medida","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Medida","submotivo":"Verificación equipo de medida","orden":"Con Orden","estado":"Abierto","clave":"Informar al cliente posible costo técnico y dejarlo explícito en observaciones del caso.","documentos":"Ninguno"},{"id":23,"gestion":"Caso Genérico","tipo":"Facturación","nombre":"Prueba de fuga por exceso de consumo","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Facturación","submotivo":"Facturación Excesiva","orden":"Sin Orden","estado":"Cerrado","clave":"Se utiliza cuando se sugiere la realización de prueba de fuga por reclamos de alto consumo.","documentos":"Ninguno"},{"id":24,"gestion":"Caso Genérico","tipo":"Medidores","nombre":"Subregistro medidor inoperativo","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Disciplina de mercado","submotivo":"Subregistro medidor inoperativo","orden":"Con Orden","estado":"Abierto","clave":"Se ingresa cuando el medidor posee la misma lectura trabada o marca de forma continua consumo cero.","documentos":"Ninguno"},{"id":25,"gestion":"Caso Genérico","tipo":"Lecturas","nombre":"Verificación de dirección","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Lectura","submotivo":"Verificación de dirección","orden":"Sin Orden","estado":"Cerrado","clave":"Cuando el cliente solicita modificar o rectificar formalmente la dirección del suministro.","documentos":"Certificado de número municipal enviado a fonodoc@enel.com"},{"id":26,"gestion":"Caso Genérico","tipo":"Medidores","nombre":"Solicitud de instalación medidor inteligente","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Medidor Inteligente","submotivo":"Solicitud de instalación","orden":"Con Orden","estado":"Abierto","clave":"Registrar: Nombre Completo, Rut, Teléfonos, Correo, Dirección + Coordenadas. Solo en periodos de campaña activa.","documentos":"Datos de contacto completos + Coordenadas precisas"},{"id":27,"gestion":"Caso Genérico","tipo":"Lecturas","nombre":"Reclamo contra el lector","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Lectura","submotivo":"Reclamo por atención","orden":"Con Orden","estado":"Abierto","clave":"Utilizado cuando el usuario formaliza un reclamo contra el personal lector en terreno.","documentos":"Ninguno"},{"id":28,"gestion":"Caso Genérico","tipo":"Facturación","nombre":"Explicación de un cargo en boleta","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Facturación","submotivo":"Cargo/ abono en boleta","orden":"Sin Orden","estado":"Cerrado","clave":"Para consultas que escalan a Nivel II (Multas por reactiva, tarifas complejas). Solo gestionable de ruta 101 a 120.","documentos":"Ninguno"},{"id":29,"gestion":"Caso Genérico","tipo":"Recaudación","nombre":"Pago no ingresado","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Recaudación","submotivo":"Pago no ingresado","orden":"Sin Orden","estado":"Cerrado","clave":"Cliente indica pago realizado pero este no figura imputado ni abonado en los sistemas.","documentos":"Enviar a fonodoc@enel.com: Carnet identidad ambos lados, Cartola bancaria (tras 72h hábiles), 4 últimos dígitos tarjeta"},{"id":30,"gestion":"Caso Genérico","tipo":"Recaudación","nombre":"Pago equivocado","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Recaudación","submotivo":"Corrección pago equivocado","orden":"Sin Orden","estado":"Cerrado","clave":"Cliente erró en el número de suministro al pagar.","documentos":"Enviar a fonodoc@enel.com: CI ambos lados, Cartola bancaria, Comprobante, indicar Suministro CORRECTO e INCORRECTO"},{"id":31,"gestion":"Caso Genérico","tipo":"Facturación","nombre":"Refacturación Error de lectura","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Canales de atención","submotivo":"Transferencia Call Center","orden":"Sin Orden","estado":"Cerrado","clave":"Ingresar con datos base y transferir de inmediato a Nivel II. Anotar lectura cliente, fecha y valor facturado.","documentos":"Ninguno"},{"id":32,"gestion":"Caso Genérico","tipo":"Facturación","nombre":"Refacturación provisional última boleta","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Facturación","submotivo":"Facturación provisoria","orden":"Sin Orden","estado":"Cerrado","clave":"Ingresar datos y transferir obligatoriamente a Nivel II. Anotar lectura aportada y fecha de la misma.","documentos":"Ninguno"},{"id":33,"gestion":"Caso Genérico","tipo":"Facturación","nombre":"Refacturación intereses y pago fuera de plazo","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Facturación","submotivo":"Cargo/ abono en boleta","orden":"Sin Orden","estado":"Cerrado","clave":"Llenar debidamente observaciones técnicas y transferir de manera obligatoria a la mesa de Nivel II.","documentos":"Ninguno"},{"id":34,"gestion":"Caso Genérico","tipo":"Facturación","nombre":"Emisión boleta Braille","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Facturación","submotivo":"Creación/modificación de perfil de facturación","orden":"Sin Orden","estado":"Cerrado","clave":"Suscripción especial para clientes con discapacidad visual.","documentos":"Acreditación de condición de no vidente enviada a fonodoc@enel.com u Oficinas Comerciales"},{"id":35,"gestion":"Caso Genérico","tipo":"Facturación","nombre":"Consultas Subsidio Eléctrico","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Facturación","submotivo":"Subsidio Eléctrico","orden":"Sin Orden","estado":"Cerrado","clave":"Derivar e informar sobre el portal oficial www.subsidioelectrico.cl. El canal telefónico solo orienta.","documentos":"Ninguno"},{"id":36,"gestion":"Caso Genérico","tipo":"Boletas","nombre":"Envíos postales","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Entrega de boletas y facturas","submotivo":"Ingreso o modificación dirección postal","orden":"Sin Orden","estado":"Cerrado","clave":"Si es factura corporativa, el cliente debe autorizar cobro adicional mediante correo formal.","documentos":"Correo formal de aceptación en caso de Facturas corporativas"},{"id":37,"gestion":"Caso Genérico","tipo":"Boletas","nombre":"Anormalidad de reparto (Hasta 6 boletas)","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Entrega de boletas y facturas","submotivo":"Solicita regularizar envío boleta/factura","orden":"Sin Orden","estado":"Cerrado","clave":"Reclamos de hasta 6 meses sin recepción física. Validar si aplica envío ágil vía e-mail.","documentos":"Ninguno"},{"id":38,"gestion":"Caso Genérico","tipo":"Boletas","nombre":"Anormalidad de reparto (Más de 6 meses)","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Entrega de boletas y facturas","submotivo":"No recibe boleta/factura 6+ meses","orden":"Con Orden","estado":"Abierto","clave":"Reclamo severo de distribución. Revisar si EDE está activo y evaluar factibilidad digital.","documentos":"Ninguno"},{"id":39,"gestion":"Caso Genérico","tipo":"Boletas","nombre":"Anormalidad de envío EDE","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Entrega de boletas y facturas","submotivo":"Solicita regularizar envío EDE","orden":"Sin Orden","estado":"Cerrado","clave":"Problemas técnicos o rebotes en la distribución de la boleta o factura electrónica digital.","documentos":"Ninguno"},{"id":40,"gestion":"Caso Genérico","tipo":"Boletas","nombre":"Reclamo contra el repartidor","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Entrega de boletas y facturas","submotivo":"Reclamo contra el repartidor","orden":"Con Orden","estado":"Abierto","clave":"Ingreso de denuncias formales asociadas a mala praxis o nula entrega por parte de la contrata de reparto.","documentos":"Ninguno"},{"id":41,"gestion":"Caso Genérico","tipo":"Recaudación","nombre":"Solicitud de convenio","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Recaudación","submotivo":"Informa facilidades de pago","orden":"Sin Orden","estado":"Cerrado","clave":"Obligatorio en Descripción: Nombre, RUT, Serie Carnet, Fono, Mail, Deuda, Pie y Cuotas. Entregar a supervisor.","documentos":"Ninguno"},{"id":42,"gestion":"Caso Genérico","tipo":"Recaudación","nombre":"Devolución de saldo a favor","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Recaudación","submotivo":"Devolución de crédito","orden":"Sin Orden","estado":"Cerrado","clave":"Completar obligatoriamente campos de Menú Adicional: Valor Pago y Método de pago.","documentos":"Enviar a fonodoc@enel.com: CI, comprobantes de pago, cartola bancaria o Certificado de Cuenta Bancaria"},{"id":43,"gestion":"Caso Genérico","tipo":"Recaudación","nombre":"Pago mal amortizado","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Recaudación","submotivo":"Pago mal amortizado","orden":"Sin Orden","estado":"Cerrado","clave":"Al finalizar el ingreso del caso en la plataforma, dar aviso inmediato y obligatorio al supervisor.","documentos":"Ninguno"},{"id":44,"gestion":"Caso Genérico","tipo":"Corte y Reposición","nombre":"Reiteración reposición menos de 24 horas","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Corte y reposición","submotivo":"Reiteración reposición menos de 24 horas","orden":"Sin Orden","estado":"Cerrado","clave":"Aplica si el tiempo transcurrido desde el pago efectivo es inferior a las 24 horas legales.","documentos":"Ninguno"},{"id":45,"gestion":"Caso Genérico","tipo":"Corte y Reposición","nombre":"Reiteración reposición más de 24 horas","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Corte y reposición","submotivo":"Reiteración reposición más de 24 horas","orden":"Sin Orden","estado":"Cerrado","clave":"Solo si excede las 24 horas y el cliente exige reclamo formal. Si es por deuda, usar accionador.","documentos":"Ninguno"},{"id":46,"gestion":"Caso Genérico","tipo":"Facturación","nombre":"Explicación Consumo no Registrado (CNR)","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Disciplina de mercado","submotivo":"Cargo CNR","orden":"Sin Orden","estado":"Cerrado","clave":"Utilizar cuando se explica el motivo de un CNR y el cliente manifiesta conformidad con los términos.","documentos":"Ninguno"},{"id":47,"gestion":"Caso Genérico","tipo":"Facturación","nombre":"Apelación Consumo no Registrado (CNR)","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Disciplina de mercado","submotivo":"Cargo CNR","orden":"Con Orden","estado":"Abierto","clave":"Utilizar si el cliente rechaza la explicación del CNR y solicita formalizar un reclamo técnico.","documentos":"Ninguno"},{"id":48,"gestion":"Caso Genérico","tipo":"Facturación","nombre":"Normalización Pendiente CNR","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Disciplina de mercado","submotivo":"Normalización por CNR","orden":"Con Orden","estado":"Abierto","clave":"Casos operativos de regularización técnica en empalmes que registraron consumos no registrados.","documentos":"Ninguno"},{"id":49,"gestion":"Caso Genérico","tipo":"Facturación","nombre":"Denuncia de hurto (Con dirección)","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Disciplina de mercado","submotivo":"Denuncia de hurto Energía","orden":"Con Orden","estado":"Abierto","clave":"Se ingresa directamente al contar con la dirección exacta donde ocurre la anomalía o hurto.","documentos":"Ninguno"},{"id":50,"gestion":"Caso Genérico","tipo":"Facturación","nombre":"Denuncia de hurto (Sin dirección)","ruta":"A través de la cuenta corporativa: AFECTADOS NO CLIENTES","accion":"Crear Caso","motivo":"Disciplina de mercado","submotivo":"Denuncia de hurto Energía","orden":"Con Orden","estado":"Abierto","clave":"Al desconocer la dirección exacta del infractor, se crea mediante la cuenta AFECTADOS NO CLIENTES.","documentos":"Ninguno"},{"id":51,"gestion":"Caso Genérico","tipo":"Calidad de suministro","nombre":"Cortes reiterados (Con caso emergencia abierto)","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Calidad de suministro","submotivo":"Requerimiento Cortes reiterados","orden":"Con Orden","estado":"Abierto","clave":"Completar Menú Adicional (Cortes, Duración). Asignar obligatoriamente el N° del caso de Emergencia.","documentos":"Ninguno"},{"id":52,"gestion":"Caso Genérico","tipo":"Calidad de suministro","nombre":"Cortes reiterados (Sin emergencia en curso)","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Calidad de suministro","submotivo":"Variaciones voltaje/Cortes reiterados","orden":"Con Orden","estado":"Abierto","clave":"Cliente con energía actual. Llenar campos de Menú Adicional: Cantidad de cortes en 3 meses y duración.","documentos":"Ninguno"},{"id":53,"gestion":"Caso Genérico","tipo":"Calidad de suministro","nombre":"Variaciones de voltaje","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Calidad de suministro","submotivo":"Variaciones voltaje/Cortes reiterados","orden":"Con Orden","estado":"Abierto","clave":"Completar de manera obligatoria en el Menú Adicional: Tipo de variación y magnitud de la variación.","documentos":"Ninguno"},{"id":54,"gestion":"Caso Genérico","tipo":"Calidad de suministro","nombre":"Empalme fuera de norma","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Calidad de suministro","submotivo":"Empalme fuera de norma","orden":"Con Orden","estado":"Abierto","clave":"Reporte de riesgos eléctricos inminentes en la cometida, poste o empalme directo.","documentos":"Ninguno"},{"id":55,"gestion":"Caso Genérico","tipo":"Calidad de suministro","nombre":"Trabajo provisorio","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Atención Técnica","submotivo":"Trabajo Provisorio","orden":"Con Orden","estado":"Abierto","clave":"Reporte o requerimiento por instalaciones de faenas o soluciones técnicas provisorias.","documentos":"Ninguno"},{"id":56,"gestion":"Caso Genérico","tipo":"Calidad de suministro","nombre":"Agregar artefacto dañado a caso existente","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Calidad de suministro","submotivo":"Aporta documento /agrega artefacto dañado","orden":"Con Orden","estado":"Abierto","clave":"Indicar explícitamente en los comentarios de la gestión el número del caso original de daño.","documentos":"Ninguno"},{"id":57,"gestion":"Caso Genérico","tipo":"Calidad de suministro","nombre":"Reclamo por atención artefacto dañado","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Calidad de suministro","submotivo":"reclamo por atención servicio técnico artefacto dañado.","orden":"Con Orden","estado":"Abierto","clave":"Disconformidad del cliente con la visita o evaluación del servicio técnico enviado a terreno.","documentos":"Ninguno"},{"id":58,"gestion":"Caso Genérico","tipo":"Facturación","nombre":"Modificar nombre a factura","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Modificación de datos","submotivo":"Modificación de datos comerciales","orden":"Sin Orden","estado":"Cerrado","clave":"PROHIBIDO REALIZAR POR TELÉFONO. Cliente debe canalizar documentación vía mail.","documentos":"Carta de solicitud firmada con datos completos + Copia CI + Copia RUT Empresa + Último documento Enel"},{"id":59,"gestion":"Caso Genérico","tipo":"Boletas","nombre":"Cheque devuelto","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Recaudación","submotivo":"Cheque devuelto","orden":"Sin Orden","estado":"Cerrado","clave":"Gestión operativa interna asociada a cheques rebotados, protestados o sin fondos.","documentos":"Ninguno"},{"id":60,"gestion":"Caso Genérico","tipo":"Facturación","nombre":"Soporte sesión Enel","ruta":"Contacto -> Suministro -> Cuenta -> Casos -> Crear Caso","accion":"Crear Caso","motivo":"Soporte Internet","submotivo":"Error registro en página web","orden":"Con Orden","estado":"Abierto","clave":"Inconvenientes de acceso, clave o enrolamiento técnico en la plataforma web o sucursal virtual.","documentos":"Ninguno"}];
+
+    let modo = "guiado";
+    let insistenciaActiva = false;
+    let procedimientoSeleccionado = null;
+
+    const $ = id => document.getElementById(id);
+
+    function limpiarTexto(valor) {
+      return String(valor ?? "").trim();
+    }
+
+    function normalizar(valor) {
+      return limpiarTexto(valor)
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+    }
+
+    function valor(id) {
+      return limpiarTexto($(id).value);
+    }
+
+    function mostrarNA(valorTexto) {
+      const v = limpiarTexto(valorTexto);
+      return (!v || normalizar(v) === "n/a") ? "No aplica" : v;
+    }
+
+    function sugerirObservacion(nombre) {
+      const n = limpiarTexto(nombre);
+      const low = normalizar(n);
+
+      if (!n) return "";
+
+      if (
+        low.startsWith("informa ") ||
+        low.startsWith("explicacion ") ||
+        low.startsWith("consultas ") ||
+        low.includes("informa fecha") ||
+        low.includes("informa saldo")
+      ) {
+        return `Cliente consulta por ${n.toLowerCase()}.`;
+      }
+
+      if (
+        low.includes("reclamo") ||
+        low.includes("anormalidad") ||
+        low.includes("pago no ingresado") ||
+        low.includes("pago equivocado") ||
+        low.includes("cortes reiterados") ||
+        low.includes("variaciones de voltaje") ||
+        low.includes("artefacto dañado") ||
+        low.includes("cheque devuelto") ||
+        low.includes("error")
+      ) {
+        return `Cliente informa situación asociada a ${n.toLowerCase()}. Solicita revisión y gestión correspondiente.`;
+      }
+
+      if (
+        low.includes("verificacion") ||
+        low.includes("verificación")
+      ) {
+        return `Cliente solicita ${n.toLowerCase()}.`;
+      }
+
+      return `Cliente solicita gestión por ${n.toLowerCase()}.`;
+    }
+
+    function cargarTipos() {
+      const tipos = [...new Set(PROCEDIMIENTOS.map(p => p.tipo))]
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b, "es"));
+
+      const select = $("tipoProcedimiento");
+      select.innerHTML = '<option value="">Selecciona un tipo...</option>';
+
+      tipos.forEach(tipo => {
+        const option = document.createElement("option");
+        option.value = tipo;
+        option.textContent = tipo;
+        select.appendChild(option);
+      });
+    }
+
+    function cargarProcedimientos() {
+      const tipo = $("tipoProcedimiento").value;
+      const busqueda = normalizar($("buscarProcedimiento").value);
+      const select = $("procedimiento");
+
+      let lista = PROCEDIMIENTOS.filter(p => {
+        const coincideTipo = !tipo || p.tipo === tipo;
+        const bolsa = normalizar([
+          p.nombre,
+          p.tipo,
+          p.motivo,
+          p.submotivo,
+          p.clave
+        ].join(" "));
+
+        const coincideBusqueda = !busqueda || bolsa.includes(busqueda);
+        return coincideTipo && coincideBusqueda;
+      });
+
+      lista.sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
+
+      select.innerHTML = '<option value="">Selecciona un procedimiento...</option>';
+
+      lista.forEach(p => {
+        const option = document.createElement("option");
+        option.value = p.id;
+        option.textContent = p.nombre;
+        select.appendChild(option);
+      });
+
+      select.disabled = !tipo && !busqueda;
+
+      if (select.disabled) {
+        select.innerHTML = '<option value="">Selecciona primero un tipo...</option>';
+      }
+
+      procedimientoSeleccionado = null;
+      ocultarGuia();
+      $("inicioObs").value = "";
+      actualizarObs();
+    }
+
+    function seleccionarProcedimiento() {
+      const id = Number($("procedimiento").value);
+
+      procedimientoSeleccionado =
+        PROCEDIMIENTOS.find(p => p.id === id) || null;
+
+      if (!procedimientoSeleccionado) {
+        ocultarGuia();
+        $("inicioObs").value = "";
+        actualizarObs();
+        return;
+      }
+
+      const p = procedimientoSeleccionado;
+
+      $("guiaProcedimiento").classList.remove("hidden");
+
+      $("gGestion").textContent = p.gestion || "Gestión";
+      $("gOrden").textContent = p.orden || "—";
+      $("gEstado").textContent = p.estado || "—";
+
+      $("gEstado").className =
+        "badge " +
+        (normalizar(p.estado).includes("abierto") ? "open" : "closed");
+
+      $("gMotivo").textContent = mostrarNA(p.motivo);
+      $("gSubmotivo").textContent = mostrarNA(p.submotivo);
+      $("gRuta").textContent = mostrarNA(p.ruta);
+      $("gAccion").textContent = mostrarNA(p.accion);
+      $("gClave").textContent = mostrarNA(p.clave);
+      $("gDocumentos").textContent = mostrarNA(p.documentos);
+
+      $("inicioObs").value = sugerirObservacion(p.nombre);
+      actualizarObs();
+    }
+
+    function ocultarGuia() {
+      $("guiaProcedimiento").classList.add("hidden");
+    }
+
+    function actualizarObs() {
+      let inicio = valor("inicioObs");
+      const comentarios = valor("comentarios");
+
+      if (modo === "rapido") {
+        inicio = "";
+      }
+
+      $("obsFinal").value = [inicio, comentarios]
+        .filter(Boolean)
+        .join(" ");
+
+      actualizarPreview();
+    }
+
+    function actualizarPreview() {
+      const lineas = [];
+
+      lineas.push(`Caso: ${valor("caso")}`);
+      lineas.push("");
+
+      if (insistenciaActiva) {
+        const detalle = valor("detalleInsistencia");
+        lineas.push(`Insistencia: ${detalle ? detalle : "Sí"}`);
+      }
+
+      lineas.push(`Nombre: ${valor("nombre")}`);
+      lineas.push(`RUT: ${valor("rut")}`);
+      lineas.push(`Telefono: ${valor("telefono")}`);
+      lineas.push(`Suministro: ${valor("suministro")}`);
+      lineas.push(`Direccion: ${valor("direccion")}`);
+      lineas.push(`Comuna: ${valor("comuna")}`);
+      lineas.push(`Connid: ${valor("connid")}`);
+      lineas.push("");
+      lineas.push(`Obs. ${valor("obsFinal")}`);
+      lineas.push("");
+      lineas.push(`Atte. ${valor("ejecutivo")}`);
+
+      $("preview").textContent = lineas.join("\n");
+    }
+
+    function cambiarModo(nuevoModo) {
+      modo = nuevoModo;
+
+      const guiado = modo === "guiado";
+
+      $("modoGuiado").classList.toggle("active", guiado);
+      $("modoRapido").classList.toggle("active", !guiado);
+
+      $("procedimientoSection").classList.toggle("hidden", !guiado);
+      $("sugerenciaBox").classList.toggle("hidden", !guiado);
+
+      $("obsTitle").textContent = guiado ? "5. Observación" : "4. Observación";
+      $("previewTitle").textContent = guiado ? "6. Caso listo para copiar" : "5. Caso listo para copiar";
+
+      $("obsHelp").textContent = guiado
+        ? "Al seleccionar un procedimiento se generará un inicio sugerido. Puedes modificarlo y agregar tus propios comentarios."
+        : "Escribe directamente la observación que quieres dejar registrada.";
+
+      if (!guiado) {
+        $("inicioObs").value = "";
+        procedimientoSeleccionado = null;
+        ocultarGuia();
+      }
+
+      actualizarObs();
+    }
+
+    function toggleInsistencia() {
+      insistenciaActiva = !insistenciaActiva;
+
+      $("insistenciaBox").classList.toggle("hidden", !insistenciaActiva);
+      $("toggleInsistencia").classList.toggle("toggle-on", insistenciaActiva);
+
+      $("toggleInsistencia").textContent =
+        insistenciaActiva
+          ? "✓ Insistencia agregada"
+          : "+ Agregar insistencia";
+
+      if (!insistenciaActiva) {
+        $("detalleInsistencia").value = "";
+      }
+
+      actualizarPreview();
+    }
+
+    function guardarEjecutivo() {
+      const nombre = valor("ejecutivo");
+
+      if (!nombre) {
+        alert("Escribe el nombre del ejecutivo antes de guardar.");
+        return;
+      }
+
+      localStorage.setItem("nombreEjecutivo", nombre);
+
+      const btn = $("guardarEjecutivo");
+      const textoOriginal = btn.textContent;
+
+      btn.textContent = "Guardado ✓";
+
+      setTimeout(() => {
+        btn.textContent = textoOriginal;
+      }, 1400);
+
+      actualizarPreview();
+    }
+
+    function cargarEjecutivoGuardado() {
+      const guardado = localStorage.getItem("nombreEjecutivo");
+
+      if (guardado) {
+        $("ejecutivo").value = guardado;
+      }
+    }
+
+    async function copiarTexto(texto) {
+      if (!limpiarTexto(texto)) return;
+
+      try {
+        await navigator.clipboard.writeText(texto);
+      } catch (error) {
+        const area = document.createElement("textarea");
+        area.value = texto;
+        area.style.position = "fixed";
+        area.style.opacity = "0";
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand("copy");
+        area.remove();
+      }
+
+      $("copiado").classList.remove("hidden");
+
+      setTimeout(() => {
+        $("copiado").classList.add("hidden");
+      }, 1600);
+    }
+
+    function nuevaLlamada() {
+      const ejecutivo = valor("ejecutivo");
+
+      [
+        "caso",
+        "nombre",
+        "rut",
+        "telefono",
+        "suministro",
+        "direccion",
+        "comuna",
+        "connid",
+        "detalleInsistencia",
+        "buscarProcedimiento",
+        "inicioObs",
+        "comentarios",
+        "obsFinal"
+      ].forEach(id => {
+        $(id).value = "";
+      });
+
+      $("tipoProcedimiento").value = "";
+      $("procedimiento").innerHTML =
+        '<option value="">Selecciona primero un tipo...</option>';
+      $("procedimiento").disabled = true;
+
+      insistenciaActiva = false;
+      procedimientoSeleccionado = null;
+
+      $("insistenciaBox").classList.add("hidden");
+      $("toggleInsistencia").classList.remove("toggle-on");
+      $("toggleInsistencia").textContent = "+ Agregar insistencia";
+
+      ocultarGuia();
+
+      $("ejecutivo").value = ejecutivo;
+
+      actualizarPreview();
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    [
+      "caso",
+      "nombre",
+      "rut",
+      "telefono",
+      "suministro",
+      "direccion",
+      "comuna",
+      "connid",
+      "detalleInsistencia",
+      "ejecutivo"
+    ].forEach(id => {
+      $(id).addEventListener("input", actualizarPreview);
+    });
+
+    $("inicioObs").addEventListener("input", actualizarObs);
+    $("comentarios").addEventListener("input", actualizarObs);
+
+    $("tipoProcedimiento").addEventListener("change", cargarProcedimientos);
+    $("buscarProcedimiento").addEventListener("input", cargarProcedimientos);
+    $("procedimiento").addEventListener("change", seleccionarProcedimiento);
+
+    $("modoGuiado").addEventListener("click", () => cambiarModo("guiado"));
+    $("modoRapido").addEventListener("click", () => cambiarModo("rapido"));
+
+    $("toggleInsistencia").addEventListener("click", toggleInsistencia);
+    $("guardarEjecutivo").addEventListener("click", guardarEjecutivo);
+
+    $("copiarCaso").addEventListener("click", () => {
+      copiarTexto($("preview").textContent);
+    });
+
+    $("copiarObs").addEventListener("click", () => {
+      copiarTexto(valor("obsFinal"));
+    });
+
+    $("nuevaLlamada").addEventListener("click", nuevaLlamada);
+
+    cargarEjecutivoGuardado();
+    cargarTipos();
+    actualizarObs();
+    actualizarPreview();
+  </script>
+</body>
+</html>
