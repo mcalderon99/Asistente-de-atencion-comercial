@@ -562,6 +562,199 @@
         padding: 22px;
       }
     }
+  
+    /* ==============================
+       MÓDULO CONVENIOS
+    ============================== */
+
+    .money-box {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .money-box:focus-within {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(0, 168, 224, .12);
+    }
+
+    .money-box span {
+      padding-left: 13px;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .money-box input {
+      border: 0;
+      box-shadow: none !important;
+    }
+
+    .convenio-rules {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 14px 0 18px;
+    }
+
+    .rule-box {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #fafbfc;
+      padding: 14px;
+    }
+
+    .rule-box strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--ink);
+    }
+
+    .rule-box span {
+      color: var(--muted);
+      font-size: .86rem;
+      line-height: 1.4;
+    }
+
+    .rule-box.danger {
+      background: #fff2f4;
+      border-color: #ffcbd3;
+    }
+
+    .uf-row {
+      display: flex;
+      gap: 10px;
+      align-items: end;
+      flex-wrap: wrap;
+      margin: 12px 0 18px;
+    }
+
+    .uf-row .field {
+      flex: 1;
+      min-width: 220px;
+      margin-bottom: 0;
+    }
+
+    .convenio-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .convenio-metric {
+      border: 1px solid var(--border);
+      background: #fafbfc;
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .convenio-metric span {
+      display: block;
+      color: var(--muted);
+      font-size: .82rem;
+      margin-bottom: 5px;
+    }
+
+    .convenio-metric strong {
+      font-size: 1.05rem;
+    }
+
+    .convenio-tier {
+      border: 1px solid #b9daf5;
+      background: #eff8ff;
+      color: #075985;
+      border-radius: 13px;
+      padding: 13px 14px;
+      font-weight: 800;
+      margin: 14px 0;
+    }
+
+    .installment-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .installment-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 12px;
+      cursor: pointer;
+      background: #fff;
+    }
+
+    .installment-option:hover {
+      border-color: var(--blue);
+    }
+
+    .installment-option.selected {
+      border-color: var(--blue);
+      background: #eef9ff;
+      box-shadow: 0 0 0 2px rgba(0, 168, 224, .10);
+    }
+
+    .installment-option input {
+      width: 18px;
+      height: 18px;
+    }
+
+    .installment-option span {
+      display: block;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    .installment-option strong {
+      font-size: .95rem;
+    }
+
+    .convenio-checks {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin: 10px 0 18px;
+    }
+
+    .convenio-check {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: #fff;
+    }
+
+    .convenio-check input {
+      width: 18px;
+      height: 18px;
+      margin-top: 1px;
+    }
+
+    .convenio-check label {
+      margin: 0;
+      font-weight: 650;
+    }
+
+    @media (max-width: 820px) {
+      .convenio-rules,
+      .convenio-metrics,
+      .installment-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .convenio-checks {
+        grid-template-columns: 1fr;
+      }
+    }
+
   </style>
 </head>
 
@@ -570,10 +763,10 @@
 
     <section class="hero">
       <small>Herramienta de apoyo</small>
-      <h1>Asistente de Casos</h1>
+      <h1>Asistente Comercial</h1>
       <p>
-        Completa los datos de la llamada, selecciona el procedimiento cuando corresponda
-        y genera el texto final listo para copiar en el caso.
+        Gestiones, procedimientos y convenios de pago en una sola herramienta.
+        Completa una vez los datos de la llamada y utiliza el módulo que necesites.
       </p>
     </section>
 
@@ -604,21 +797,26 @@
     </section>
 
     <section class="card">
-      <h2>2. Tipo de registro</h2>
+      <h2>2. ¿Qué gestión necesitas realizar?</h2>
       <p class="sub">
-        Usa el caso guiado cuando necesites apoyo con el procedimiento. Usa caso rápido si solo necesitas
-        completar los datos y redactar la observación manualmente.
+        Los datos del cliente se completan una sola vez. Luego puedes trabajar con un caso guiado,
+        un caso rápido o calcular un convenio de pago.
       </p>
 
       <div class="mode-row">
         <button class="mode-btn active" id="modoGuiado" type="button">
-          <strong>🧭 Caso guiado</strong>
-          <span>Selecciona un procedimiento, revisa la información de apoyo y genera una observación inicial.</span>
+          <strong>🧭 Gestión guiada</strong>
+          <span>Procedimientos, rutas rápidas, guía y observación sugerida.</span>
         </button>
 
         <button class="mode-btn" id="modoRapido" type="button">
           <strong>⚡ Caso rápido</strong>
-          <span>Oculta el sondeo del procedimiento y deja solo los datos base más la observación.</span>
+          <span>Solo datos de la llamada, observación manual y texto listo para copiar.</span>
+        </button>
+
+        <button class="mode-btn" id="modoConvenio" type="button">
+          <strong>💳 Convenio de pago</strong>
+          <span>Calcula pie y cuotas y genera el registro completo del convenio.</span>
         </button>
       </div>
     </section>
@@ -727,6 +925,11 @@
           <button class="quick-route-btn" type="button" data-quick="lectura">
             <strong>📟 Ingreso de lectura</strong>
             <span>Lectura informada, fecha y envío por formulario.</span>
+          </button>
+
+          <button class="quick-route-btn" type="button" data-quick="ede">
+            <strong>📧 No recibe boleta</strong>
+            <span>Regularización del envío electrónico de boletas (EDE).</span>
           </button>
         </div>
       </div>
@@ -907,7 +1110,160 @@
 
     </section>
 
-    <section class="card">
+    <section class="card hidden" id="convenioSection">
+      <h2>4. Convenio de pago</h2>
+      <p class="sub">
+        Completa los antecedentes adicionales del cliente y calcula el convenio.
+        El monto consolidado considera la deuda a convenir más el saldo pendiente de un convenio vigente, si corresponde.
+      </p>
+
+      <div class="convenio-rules">
+        <div class="rule-box">
+          <strong>Hasta 50 UF</strong>
+          <span>20% de pie y alternativas de 3 a 8 cuotas.</span>
+        </div>
+        <div class="rule-box">
+          <strong>Sobre 50 y hasta 100 UF</strong>
+          <span>25% de pie y alternativas de 3 a 12 cuotas.</span>
+        </div>
+        <div class="rule-box danger">
+          <strong>Sobre 100 UF</strong>
+          <span>No se generan alternativas. Corresponde derivar a sucursal.</span>
+        </div>
+      </div>
+
+      <div class="convenio-checks">
+        <div class="convenio-check">
+          <input type="checkbox" id="cvCheckBloqueo">
+          <label for="cvCheckBloqueo">Revisé si el suministro está bloqueado.</label>
+        </div>
+        <div class="convenio-check">
+          <input type="checkbox" id="cvCheckVigente">
+          <label for="cvCheckVigente">Verifiqué si existe convenio vigente.</label>
+        </div>
+        <div class="convenio-check">
+          <input type="checkbox" id="cvCheckCuotas">
+          <label for="cvCheckCuotas">Revisé cuotas pendientes y valor de cuota.</label>
+        </div>
+        <div class="convenio-check">
+          <input type="checkbox" id="cvCheckDeuda">
+          <label for="cvCheckDeuda">Confirmé la deuda que se incorporará al convenio.</label>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="field">
+          <label for="serieConvenio">N° de serie</label>
+          <input id="serieConvenio" placeholder="N° de serie del documento">
+        </div>
+
+        <div class="field">
+          <label for="fechaNacimientoConvenio">Fecha de nacimiento</label>
+          <input id="fechaNacimientoConvenio" type="date">
+        </div>
+
+        <div class="field">
+          <label for="correoConvenio">Correo</label>
+          <input id="correoConvenio" type="email" placeholder="cliente@correo.cl">
+        </div>
+
+        <div class="field">
+          <label for="numeroClienteConvenio">N° de cliente</label>
+          <input id="numeroClienteConvenio" placeholder="Número de cliente">
+        </div>
+
+        <div class="field">
+          <label for="deudaConvenio">Deuda a convenir</label>
+          <div class="money-box">
+            <span>$</span>
+            <input id="deudaConvenio" inputmode="numeric" placeholder="Ej: 350.000">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Convenio anterior</label>
+          <div class="convenio-check" style="min-height:47px;align-items:center">
+            <input id="tieneConvenioVigente" type="checkbox">
+            <label for="tieneConvenioVigente">Existe convenio vigente</label>
+          </div>
+        </div>
+      </div>
+
+      <div id="convenioAnteriorBox" class="grid-2 hidden">
+        <div class="field">
+          <label for="cuotasPendientesConvenio">Cuotas pendientes</label>
+          <input id="cuotasPendientesConvenio" type="number" min="1" max="48" placeholder="Ej: 6">
+        </div>
+
+        <div class="field">
+          <label for="valorCuotaConvenio">Valor de cada cuota</label>
+          <div class="money-box">
+            <span>$</span>
+            <input id="valorCuotaConvenio" inputmode="numeric" placeholder="Ej: 25.000">
+          </div>
+        </div>
+      </div>
+
+      <div class="uf-row">
+        <span class="badge" id="estadoUFConvenio">UF: se consultará al calcular</span>
+
+        <div id="ufManualBox" class="field hidden">
+          <label for="ufManualConvenio">Valor UF manual</label>
+          <div class="money-box">
+            <span>$</span>
+            <input id="ufManualConvenio" inputmode="numeric" placeholder="Ej: 40.000">
+          </div>
+        </div>
+
+        <button class="action secondary hidden" id="usarUFManualConvenio" type="button">
+          Usar UF manual
+        </button>
+      </div>
+
+      <div id="errorConvenio" class="alert critical hidden"></div>
+
+      <div class="toolbar">
+        <button class="action primary" id="calcularConvenio" type="button">
+          Calcular convenio
+        </button>
+        <button class="action secondary" id="limpiarConvenio" type="button">
+          Limpiar cálculo
+        </button>
+      </div>
+
+      <div id="resultadoConvenio" class="hidden" style="margin-top:20px">
+        <div class="convenio-tier" id="tramoConvenio"></div>
+
+        <div class="convenio-metrics">
+          <div class="convenio-metric">
+            <span>Monto consolidado</span>
+            <strong id="montoConsolidadoConvenio">$0</strong>
+          </div>
+          <div class="convenio-metric">
+            <span id="labelPieConvenio">Pie</span>
+            <strong id="pieConvenio">$0</strong>
+          </div>
+          <div class="convenio-metric">
+            <span>Saldo a convenir</span>
+            <strong id="saldoConvenio">$0</strong>
+          </div>
+        </div>
+
+        <label>Selecciona la alternativa acordada con el cliente</label>
+        <div class="installment-grid" id="opcionesCuotasConvenio"></div>
+
+        <p class="mini" style="margin:12px 0 0">
+          Valores referenciales. Valida siempre la información y las condiciones con el apoyo de turno antes de confirmar la gestión.
+        </p>
+      </div>
+
+      <div class="field" style="margin-top:18px">
+        <label for="obsConvenio">Observación del convenio</label>
+        <textarea id="obsConvenio" placeholder="Ej: Cliente acepta convenio informado."></textarea>
+      </div>
+    </section>
+
+    <section class="card" id="observacionSection">
       <h2 id="obsTitle">5. Observación</h2>
       <p class="sub" id="obsHelp">
         Al seleccionar un procedimiento se generará un inicio sugerido. Puedes modificarlo y agregar tus propios comentarios.
@@ -933,7 +1289,7 @@
 
     <section class="card">
       <h2 id="previewTitle">6. Caso listo para copiar</h2>
-      <p class="sub">
+      <p class="sub" id="previewHelp">
         Este bloque conserva el formato base solicitado y está listo para pegar en el caso.
       </p>
 
@@ -972,13 +1328,29 @@
     let procedimientoSeleccionado = null;
     let rutaRapidaActiva = null;
 
+    const CONFIG_CONVENIO = {
+      limiteTramo1UF: 50,
+      limiteMaxUF: 100,
+      porcentajePieTramo1: 0.20,
+      porcentajePieTramo2: 0.25,
+      maxCuotasTramo1: 8,
+      maxCuotasTramo2: 12,
+      minCuotas: 3,
+      apiUF: "https://mindicador.cl/api/uf"
+    };
+
+    let valorUFConvenio = null;
+    let ultimoCalculoConvenio = null;
+    let cuotaConvenioSeleccionada = null;
+
     const RUTAS_RAPIDAS = {
       fuga: { id: 23, tipo: "Facturación" },
       boleta: { id: 3, tipo: "Boletas" },
       soporte: { id: 60, tipo: "Facturación" },
       saldo: { id: 5, tipo: "Facturación" },
       equipo: { id: 22, tipo: "Medidores" },
-      lectura: { id: 2, tipo: "Lecturas" }
+      lectura: { id: 2, tipo: "Lecturas" },
+      ede: { id: 39, tipo: "Boletas" }
     };
 
     const $ = id => document.getElementById(id);
@@ -1135,6 +1507,10 @@
 
       if (rutaRapidaActiva === "equipo") {
         return "Cliente solicita verificación de equipo de medida. Se informa que la revisión puede tener un costo técnico asociado y se ingresa la solicitud para revisión del medidor/equipo de medida.";
+      }
+
+      if (rutaRapidaActiva === "ede") {
+        return "Cliente informa que no está recibiendo las boletas/facturas electrónicas en su correo. Se realiza verificación de suscripción y del tipo de relación que mantiene el perfil del cliente con el suministro. Solicita regularizar el envío EDE.";
       }
 
       if (rutaRapidaActiva === "soporte") {
@@ -1463,7 +1839,322 @@
       actualizarPreview();
     }
 
+
+    function fechaCLConvenio(fecha) {
+      if (!fecha) return "";
+      const p = fecha.split("-");
+      if (p.length !== 3) return fecha;
+      return `${p[2]}-${p[1]}-${p[0]}`;
+    }
+
+    function numeroMontoConvenio(valorTexto) {
+      const n = Number(String(valorTexto ?? "").replace(/\D/g, ""));
+      return Number.isFinite(n) ? n : 0;
+    }
+
+    function monedaConvenio(valorNumero) {
+      return new Intl.NumberFormat("es-CL", {
+        style: "currency",
+        currency: "CLP",
+        maximumFractionDigits: 0
+      }).format(Math.round(valorNumero || 0));
+    }
+
+    function formatearInputDineroConvenio(input) {
+      const n = input.value.replace(/\D/g, "");
+      input.value = n ? Number(n).toLocaleString("es-CL") : "";
+    }
+
+    function limpiarErrorConvenio() {
+      $("errorConvenio").textContent = "";
+      $("errorConvenio").classList.add("hidden");
+    }
+
+    function mostrarErrorConvenio(mensaje) {
+      $("errorConvenio").textContent = mensaje;
+      $("errorConvenio").classList.remove("hidden");
+    }
+
+    function ocultarResultadoConvenio() {
+      $("resultadoConvenio").classList.add("hidden");
+      ultimoCalculoConvenio = null;
+      cuotaConvenioSeleccionada = null;
+      actualizarPreview();
+    }
+
+    async function cargarUFConvenio() {
+      const estado = $("estadoUFConvenio");
+      estado.textContent = "Consultando UF...";
+
+      try {
+        const respuesta = await fetch(CONFIG_CONVENIO.apiUF, { cache: "no-store" });
+        if (!respuesta.ok) throw new Error("UF no disponible");
+
+        const datos = await respuesta.json();
+        if (!datos.serie || !datos.serie.length) throw new Error("UF no disponible");
+
+        valorUFConvenio = Number(datos.serie[0].valor);
+
+        if (!Number.isFinite(valorUFConvenio) || valorUFConvenio <= 0) {
+          throw new Error("UF inválida");
+        }
+
+        estado.textContent = `UF disponible: ${monedaConvenio(valorUFConvenio)}`;
+        estado.className = "badge closed";
+        $("ufManualBox").classList.add("hidden");
+        $("usarUFManualConvenio").classList.add("hidden");
+      } catch (error) {
+        valorUFConvenio = null;
+        estado.textContent = "No fue posible consultar la UF automáticamente";
+        estado.className = "badge open";
+        $("ufManualBox").classList.remove("hidden");
+        $("usarUFManualConvenio").classList.remove("hidden");
+      }
+    }
+
+    function usarUFManualConvenio() {
+      const uf = numeroMontoConvenio(valor("ufManualConvenio"));
+
+      if (uf <= 0) {
+        alert("Ingresa un valor de UF válido.");
+        return;
+      }
+
+      valorUFConvenio = uf;
+      $("estadoUFConvenio").textContent = `UF manual: ${monedaConvenio(uf)}`;
+      $("estadoUFConvenio").className = "badge closed";
+      limpiarErrorConvenio();
+    }
+
+    async function calcularConvenioPago() {
+      limpiarErrorConvenio();
+      cuotaConvenioSeleccionada = null;
+
+      const deuda = numeroMontoConvenio(valor("deudaConvenio"));
+
+      if (deuda <= 0) {
+        mostrarErrorConvenio("Ingresa una deuda a convenir válida.");
+        return;
+      }
+
+      let saldoAnterior = 0;
+
+      if ($("tieneConvenioVigente").checked) {
+        const pendientes = Number(valor("cuotasPendientesConvenio"));
+        const valorCuota = numeroMontoConvenio(valor("valorCuotaConvenio"));
+
+        if (!Number.isInteger(pendientes) || pendientes < 1 || pendientes > 48) {
+          mostrarErrorConvenio("Ingresa una cantidad válida de cuotas pendientes.");
+          return;
+        }
+
+        if (valorCuota <= 0) {
+          mostrarErrorConvenio("Ingresa el valor de la cuota del convenio vigente.");
+          return;
+        }
+
+        saldoAnterior = pendientes * valorCuota;
+      }
+
+      if (!valorUFConvenio) {
+        await cargarUFConvenio();
+      }
+
+      if (!valorUFConvenio) {
+        mostrarErrorConvenio("No se puede calcular hasta contar con un valor de UF válido.");
+        return;
+      }
+
+      const total = deuda + saldoAnterior;
+      const limite50 = valorUFConvenio * CONFIG_CONVENIO.limiteTramo1UF;
+      const limite100 = valorUFConvenio * CONFIG_CONVENIO.limiteMaxUF;
+
+      if (total > limite100) {
+        $("resultadoConvenio").classList.add("hidden");
+        ultimoCalculoConvenio = null;
+        cuotaConvenioSeleccionada = null;
+
+        mostrarErrorConvenio(
+          `El monto consolidado (${monedaConvenio(total)}) supera 100 UF (${monedaConvenio(limite100)}). Corresponde derivar a sucursal.`
+        );
+
+        actualizarPreview();
+        return;
+      }
+
+      let porcentajePie;
+      let maxCuotas;
+      let tramo;
+
+      if (total <= limite50) {
+        porcentajePie = CONFIG_CONVENIO.porcentajePieTramo1;
+        maxCuotas = CONFIG_CONVENIO.maxCuotasTramo1;
+        tramo = "Hasta 50 UF: 20% de pie y hasta 8 cuotas";
+      } else {
+        porcentajePie = CONFIG_CONVENIO.porcentajePieTramo2;
+        maxCuotas = CONFIG_CONVENIO.maxCuotasTramo2;
+        tramo = "Sobre 50 UF y hasta 100 UF: 25% de pie y hasta 12 cuotas";
+      }
+
+      const pie = total * porcentajePie;
+      const saldo = total - pie;
+
+      ultimoCalculoConvenio = {
+        deuda,
+        saldoAnterior,
+        total,
+        porcentajePie,
+        pie,
+        saldo,
+        maxCuotas,
+        tramo
+      };
+
+      $("tramoConvenio").textContent = tramo;
+      $("montoConsolidadoConvenio").textContent = monedaConvenio(total);
+      $("labelPieConvenio").textContent = `Pie ${Math.round(porcentajePie * 100)}%`;
+      $("pieConvenio").textContent = monedaConvenio(pie);
+      $("saldoConvenio").textContent = monedaConvenio(saldo);
+
+      const contenedor = $("opcionesCuotasConvenio");
+      contenedor.innerHTML = "";
+
+      for (let cantidad = CONFIG_CONVENIO.minCuotas; cantidad <= maxCuotas; cantidad++) {
+        const valorCuota = saldo / cantidad;
+        const opcion = document.createElement("label");
+        opcion.className = "installment-option";
+        opcion.innerHTML = `
+          <input type="radio" name="cuotaConvenioFinal" value="${cantidad}">
+          <div>
+            <span>${cantidad} cuotas</span>
+            <strong>${monedaConvenio(valorCuota)} c/u</strong>
+          </div>
+        `;
+
+        opcion.querySelector("input").addEventListener("change", () => {
+          cuotaConvenioSeleccionada = { cantidad, valor: valorCuota };
+
+          document.querySelectorAll(".installment-option").forEach(item => {
+            item.classList.remove("selected");
+          });
+
+          opcion.classList.add("selected");
+          actualizarPreview();
+        });
+
+        contenedor.appendChild(opcion);
+      }
+
+      $("resultadoConvenio").classList.remove("hidden");
+      actualizarPreview();
+    }
+
+    function limpiarConvenioPago() {
+      [
+        "serieConvenio",
+        "fechaNacimientoConvenio",
+        "correoConvenio",
+        "numeroClienteConvenio",
+        "deudaConvenio",
+        "cuotasPendientesConvenio",
+        "valorCuotaConvenio",
+        "obsConvenio",
+        "ufManualConvenio"
+      ].forEach(id => {
+        $(id).value = "";
+      });
+
+      ["cvCheckBloqueo", "cvCheckVigente", "cvCheckCuotas", "cvCheckDeuda"].forEach(id => {
+        $(id).checked = false;
+      });
+
+      $("tieneConvenioVigente").checked = false;
+      $("convenioAnteriorBox").classList.add("hidden");
+      limpiarErrorConvenio();
+      ocultarResultadoConvenio();
+    }
+
+    function construirPreviewConvenio() {
+      const lineas = [];
+
+      lineas.push(`CONNID: ${valor("connid")}`);
+      lineas.push("");
+      lineas.push("DATOS CONVENIO:");
+
+      if (valor("caso")) {
+        lineas.push(`CASO: ${valor("caso")}`);
+      }
+
+      if (insistenciaActiva) {
+        const detalle = valor("detalleInsistencia");
+        lineas.push(`INSISTENCIA: ${detalle ? detalle : "Sí"}`);
+      }
+
+      lineas.push(`NOMBRE: ${valor("nombre")}`);
+      lineas.push(`RUT: ${valor("rut")}`);
+      lineas.push(`N° SERIE: ${valor("serieConvenio")}`);
+      lineas.push(`FECHA NAC: ${fechaCLConvenio(valor("fechaNacimientoConvenio"))}`);
+      lineas.push(`TELEFONO: ${valor("telefono")}`);
+      lineas.push(`CORREO: ${valor("correoConvenio")}`);
+      lineas.push(`N° DE CLIENTE: ${valor("numeroClienteConvenio")}`);
+      lineas.push(`SUMINISTRO: ${valor("suministro")}`);
+      lineas.push(`DIRECCIÓN: ${valor("direccion")}`);
+      lineas.push(`COMUNA: ${valor("comuna")}`);
+      lineas.push(`DEUDA: ${valor("deudaConvenio") ? monedaConvenio(numeroMontoConvenio(valor("deudaConvenio"))) : ""}`);
+      lineas.push(`CONVENIO VIGENTE: ${$("tieneConvenioVigente").checked ? "SI" : "NO"}`);
+
+      if ($("tieneConvenioVigente").checked) {
+        lineas.push(`CUOTAS PENDIENTES: ${valor("cuotasPendientesConvenio")}`);
+        lineas.push(
+          `VALOR CUOTA CONVENIO VIGENTE: ${
+            valor("valorCuotaConvenio")
+              ? monedaConvenio(numeroMontoConvenio(valor("valorCuotaConvenio")))
+              : ""
+          }`
+        );
+      }
+
+      if (ultimoCalculoConvenio) {
+        lineas.push(
+          `SALDO CONVENIO VIGENTE: ${
+            ultimoCalculoConvenio.saldoAnterior > 0
+              ? monedaConvenio(ultimoCalculoConvenio.saldoAnterior)
+              : "NO APLICA"
+          }`
+        );
+        lineas.push(`MONTO CONSOLIDADO: ${monedaConvenio(ultimoCalculoConvenio.total)}`);
+        lineas.push(`TRAMO: ${ultimoCalculoConvenio.tramo}`);
+        lineas.push(
+          `${Math.round(ultimoCalculoConvenio.porcentajePie * 100)}% PIE: ${monedaConvenio(ultimoCalculoConvenio.pie)}`
+        );
+
+        if (cuotaConvenioSeleccionada) {
+          lineas.push(
+            `${cuotaConvenioSeleccionada.cantidad} CUOTAS DE: ${monedaConvenio(cuotaConvenioSeleccionada.valor)}`
+          );
+        } else {
+          lineas.push("CUOTAS: PENDIENTE DE SELECCIONAR");
+        }
+      } else {
+        lineas.push("MONTO CONSOLIDADO:");
+        lineas.push("PIE:");
+        lineas.push("CUOTAS:");
+      }
+
+      lineas.push("");
+      lineas.push(`OBS: ${valor("obsConvenio")}`);
+      lineas.push("");
+      lineas.push(`Atte. ${valor("ejecutivo")}`);
+
+      return lineas.join("\n");
+    }
+
     function actualizarPreview() {
+      if (modo === "convenio") {
+        $("preview").textContent = construirPreviewConvenio();
+        return;
+      }
+
       const lineas = [];
 
       lineas.push(`Caso: ${valor("caso")}`);
@@ -1493,19 +2184,35 @@
       modo = nuevoModo;
 
       const guiado = modo === "guiado";
+      const rapido = modo === "rapido";
+      const convenio = modo === "convenio";
 
       $("modoGuiado").classList.toggle("active", guiado);
-      $("modoRapido").classList.toggle("active", !guiado);
+      $("modoRapido").classList.toggle("active", rapido);
+      $("modoConvenio").classList.toggle("active", convenio);
 
       $("procedimientoSection").classList.toggle("hidden", !guiado);
+      $("observacionSection").classList.toggle("hidden", convenio);
+      $("convenioSection").classList.toggle("hidden", !convenio);
       $("sugerenciaBox").classList.toggle("hidden", !guiado);
 
-      $("obsTitle").textContent = guiado ? "5. Observación" : "4. Observación";
-      $("previewTitle").textContent = guiado ? "6. Caso listo para copiar" : "5. Caso listo para copiar";
+      if (convenio) {
+        $("previewTitle").textContent = "5. Convenio listo para copiar";
+        $("previewHelp").textContent = "El registro del convenio se arma automáticamente con los datos compartidos, el cálculo y la alternativa seleccionada.";
+        $("copiarCaso").textContent = "Copiar convenio completo";
+        $("copiarObs").textContent = "Copiar solo OBS";
+        cargarUFConvenio();
+      } else {
+        $("obsTitle").textContent = guiado ? "5. Observación" : "4. Observación";
+        $("previewTitle").textContent = guiado ? "6. Caso listo para copiar" : "5. Caso listo para copiar";
+        $("previewHelp").textContent = "Este bloque conserva el formato base solicitado y está listo para pegar en el caso.";
+        $("copiarCaso").textContent = "Copiar caso completo";
+        $("copiarObs").textContent = "Copiar solo OBS";
 
-      $("obsHelp").textContent = guiado
-        ? "Al seleccionar un procedimiento se generará un inicio sugerido. Puedes modificarlo y agregar tus propios comentarios."
-        : "Escribe directamente la observación que quieres dejar registrada.";
+        $("obsHelp").textContent = guiado
+          ? "Al seleccionar un procedimiento se generará un inicio sugerido. Puedes modificarlo y agregar tus propios comentarios."
+          : "Escribe directamente la observación que quieres dejar registrada.";
+      }
 
       if (!guiado) {
         $("inicioObs").value = "";
@@ -1516,6 +2223,7 @@
       }
 
       actualizarObs();
+      actualizarPreview();
     }
 
     function toggleInsistencia() {
@@ -1609,6 +2317,15 @@
         "saldoInformado",
         "numeroUltimaBoleta",
         "correoDocumentacion",
+        "serieConvenio",
+        "fechaNacimientoConvenio",
+        "correoConvenio",
+        "numeroClienteConvenio",
+        "deudaConvenio",
+        "cuotasPendientesConvenio",
+        "valorCuotaConvenio",
+        "ufManualConvenio",
+        "obsConvenio",
         "inicioObs",
         "comentarios",
         "obsFinal"
@@ -1633,6 +2350,16 @@
       ocultarDatosLectura(false);
       ocultarExtrasRutaRapida();
       actualizarBotonesRutaRapida();
+
+      $("tieneConvenioVigente").checked = false;
+      $("convenioAnteriorBox").classList.add("hidden");
+      ["cvCheckBloqueo", "cvCheckVigente", "cvCheckCuotas", "cvCheckDeuda"].forEach(id => {
+        $(id).checked = false;
+      });
+      limpiarErrorConvenio();
+      $("resultadoConvenio").classList.add("hidden");
+      ultimoCalculoConvenio = null;
+      cuotaConvenioSeleccionada = null;
 
       $("ejecutivo").value = ejecutivo;
 
@@ -1666,6 +2393,41 @@
 
     $("lecturaCliente").addEventListener("input", actualizarSugerenciaLectura);
     $("fechaLectura").addEventListener("change", actualizarSugerenciaLectura);
+
+    [
+      "serieConvenio",
+      "fechaNacimientoConvenio",
+      "correoConvenio",
+      "numeroClienteConvenio",
+      "cuotasPendientesConvenio",
+      "obsConvenio"
+    ].forEach(id => {
+      $(id).addEventListener("input", actualizarPreview);
+      $(id).addEventListener("change", actualizarPreview);
+    });
+
+    ["deudaConvenio", "valorCuotaConvenio", "ufManualConvenio"].forEach(id => {
+      $(id).addEventListener("input", event => {
+        formatearInputDineroConvenio(event.target);
+        ocultarResultadoConvenio();
+      });
+    });
+
+    $("tieneConvenioVigente").addEventListener("change", () => {
+      const activo = $("tieneConvenioVigente").checked;
+      $("convenioAnteriorBox").classList.toggle("hidden", !activo);
+
+      if (!activo) {
+        $("cuotasPendientesConvenio").value = "";
+        $("valorCuotaConvenio").value = "";
+      }
+
+      ocultarResultadoConvenio();
+    });
+
+    $("calcularConvenio").addEventListener("click", calcularConvenioPago);
+    $("limpiarConvenio").addEventListener("click", limpiarConvenioPago);
+    $("usarUFManualConvenio").addEventListener("click", usarUFManualConvenio);
 
     $("inicioObs").addEventListener("input", actualizarObs);
     $("comentarios").addEventListener("input", actualizarObs);
@@ -1712,6 +2474,7 @@
 
     $("modoGuiado").addEventListener("click", () => cambiarModo("guiado"));
     $("modoRapido").addEventListener("click", () => cambiarModo("rapido"));
+    $("modoConvenio").addEventListener("click", () => cambiarModo("convenio"));
 
     $("toggleInsistencia").addEventListener("click", toggleInsistencia);
     $("guardarEjecutivo").addEventListener("click", guardarEjecutivo);
@@ -1721,7 +2484,7 @@
     });
 
     $("copiarObs").addEventListener("click", () => {
-      copiarTexto(valor("obsFinal"));
+      copiarTexto(modo === "convenio" ? valor("obsConvenio") : valor("obsFinal"));
     });
 
     $("nuevaLlamada").addEventListener("click", nuevaLlamada);
